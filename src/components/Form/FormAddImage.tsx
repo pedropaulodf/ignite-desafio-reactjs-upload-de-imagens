@@ -2,8 +2,6 @@ import {
   Box,
   Button,
   SimpleGrid,
-  Stack,
-  Text,
   useToast,
   VStack,
 } from '@chakra-ui/react';
@@ -162,11 +160,6 @@ export function FormAddImage({ closeModal }: FormAddImageProps): JSX.Element {
               {...register('image', { ...formValidations.image })}
               error={errors.image}
             />
-            {errors.image && (
-              <Text as="span" color="red.500" fontSize={15}>
-                {errors.image.message}
-              </Text>
-            )}
           </Box>
         </Box>
         <VStack w="full" spacing={4}>
@@ -178,12 +171,8 @@ export function FormAddImage({ closeModal }: FormAddImageProps): JSX.Element {
               name="title"
               {...register('title', { ...formValidations.title })}
               isInvalid={errors.title}
+              error={errors.title}
             />
-            {errors.title && (
-              <Text as="span" color="red.500" fontSize={15}>
-                {errors.title.message}
-              </Text>
-            )}
           </Box>
           <Box w="full">
             <TextInput
@@ -193,12 +182,8 @@ export function FormAddImage({ closeModal }: FormAddImageProps): JSX.Element {
               name="description"
               {...register('description', { ...formValidations.description })}
               isInvalid={errors.description}
+              error={errors.description}
             />
-            {errors.description && (
-              <Text as="span" color="red.500" fontSize={15}>
-                {errors.description.message}
-              </Text>
-            )}
           </Box>
 
           <Button

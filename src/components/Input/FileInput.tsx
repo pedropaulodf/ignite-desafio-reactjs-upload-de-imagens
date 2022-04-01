@@ -137,8 +137,8 @@ const FileInputBase: ForwardRefRenderFunction<
     <FormControl isInvalid={!!error}>
       <FormLabel
         mx="auto"
-        w={60}
-        h={60}
+        w={52}
+        h={52}
         htmlFor={name}
         cursor={isSending ? 'progress' : 'pointer'}
         opacity={isSending ? 0.5 : 1}
@@ -202,7 +202,7 @@ const FileInputBase: ForwardRefRenderFunction<
                   justifyContent="center"
                   flexDir="column"
                 >
-                  <Icon as={FiPlus} w={14} h={14} />
+                  <Icon as={FiPlus} w={12} h={12} />
                   <Text as="span" pt={2} textAlign="center">
                     Adicione sua imagem
                   </Text>
