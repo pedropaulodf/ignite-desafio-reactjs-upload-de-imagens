@@ -1,4 +1,12 @@
-import { Box, Button, Stack, useToast } from '@chakra-ui/react';
+import {
+  Box,
+  Button,
+  SimpleGrid,
+  Stack,
+  Text,
+  useToast,
+  VStack,
+} from '@chakra-ui/react';
 import { useForm } from 'react-hook-form';
 import { useState } from 'react';
 import { useMutation, useQueryClient } from 'react-query';
@@ -21,7 +29,7 @@ export function FormAddImage({ closeModal }: FormAddImageProps): JSX.Element {
   const [imageUrl, setImageUrl] = useState('');
   const [localImageUrl, setLocalImageUrl] = useState('');
   const toast = useToast();
-  
+
   const imageTypesAllowedRegex =
     /(?:([^:/?#]+):)?(?:([^/?#]*))?([^?#](?:jpeg|gif|png))(?:\?([^#]*))?(?:#(.*))?/g;
 
@@ -30,7 +38,7 @@ export function FormAddImage({ closeModal }: FormAddImageProps): JSX.Element {
       // TODO REQUIRED, LESS THAN 10 MB AND ACCEPTED FORMATS VALIDATIONS
       required: {
         value: true,
-        message: 'Arquivo obrigatório'
+        message: 'Arquivo obrigatório',
       },
       validate: {
         lessThan10MB: fileList =>
@@ -44,27 +52,27 @@ export function FormAddImage({ closeModal }: FormAddImageProps): JSX.Element {
       // TODO REQUIRED, MIN AND MAX LENGTH VALIDATIONS
       required: {
         value: true,
-        message: 'Título obrigatório'
+        message: 'Título obrigatório',
       },
       minLength: {
         value: 2,
-        message: 'Mínimo de 2 caracteres'
+        message: 'Mínimo de 2 caracteres',
       },
       maxLength: {
         value: 20,
-        message: 'Máximo de 20 caracteres'
+        message: 'Máximo de 20 caracteres',
       },
     },
     description: {
       // TODO REQUIRED, MAX LENGTH VALIDATIONS
       required: {
         value: true,
-        message: 'Descrição obrigatória'
+        message: 'Descrição obrigatória',
       },
-      maxLength : {
+      maxLength: {
         value: 65,
-        message: 'Máximo de 65 caracteres'
-      }
+        message: 'Máximo de 65 caracteres',
+      },
     },
   };
 
@@ -81,7 +89,7 @@ export function FormAddImage({ closeModal }: FormAddImageProps): JSX.Element {
       // TODO ONSUCCESS MUTATION
       onSuccess: () => {
         queryClient.invalidateQueries('images');
-      }
+      },
     }
   );
 
@@ -97,36 +105,37 @@ export function FormAddImage({ closeModal }: FormAddImageProps): JSX.Element {
   const onSubmit = async (data: ImageToUpload): Promise<void> => {
     try {
       // TODO SHOW ERROR TOAST IF IMAGE URL DOES NOT EXISTS
-      if(!imageUrl){
+      if (!imageUrl) {
         toast({
           title: 'Imagem não adicionada',
-          description: "É preciso adicionar e aguardar o upload de uma imagem antes de realizar o cadastro.",
+          description:
+            'É preciso adicionar e aguardar o upload de uma imagem antes de realizar o cadastro.',
           status: 'error',
           duration: 4000,
           isClosable: true,
-        })
+        });
         return;
       }
       // TODO EXECUTE ASYNC MUTATION
       await mutation.mutateAsync(data);
-    
+
       // TODO SHOW SUCCESS TOAST
       toast({
         title: 'Imagem cadastrada',
-        description: "Sua imagem foi cadastrada com sucesso.",
+        description: 'Sua imagem foi cadastrada com sucesso.',
         status: 'success',
         duration: 4000,
         isClosable: true,
-      })
+      });
     } catch {
       // TODO SHOW ERROR TOAST IF SUBMIT FAILED
       toast({
         title: 'Falha no cadastro',
-        description: "Ocorreu um erro ao tentar cadastrar a sua imagem.",
+        description: 'Ocorreu um erro ao tentar cadastrar a sua imagem.',
         status: 'error',
         duration: 4000,
         isClosable: true,
-      })
+      });
     } finally {
       // TODO CLEAN FORM, STATES AND CLOSE MODAL
       setImageUrl('');
@@ -138,49 +147,71 @@ export function FormAddImage({ closeModal }: FormAddImageProps): JSX.Element {
 
   return (
     <Box as="form" width="100%" onSubmit={handleSubmit(onSubmit)}>
-      <Stack spacing={4}>
-        <FileInput
-          setImageUrl={setImageUrl}
-          localImageUrl={localImageUrl}
-          setLocalImageUrl={setLocalImageUrl}
-          setError={setError}
-          trigger={trigger}
-          // TODO SEND IMAGE ERRORS
-          // TODO REGISTER IMAGE INPUT WITH VALIDATIONS
-          name="image"
-          {...register('image', { ...formValidations.image })}
-        />
-        {errors.image && <p>{errors.image.message}</p>}
-        
-        <TextInput
-          placeholder="Título da imagem..."
-          // TODO SEND TITLE ERRORS
-          // TODO REGISTER TITLE INPUT WITH VALIDATIONS
-          name="title"
-          {...register('title', { ...formValidations.title })}
-        />
-        {errors.title && <p>{errors.title.message}</p>}
+      <SimpleGrid columns={[1, 1, 2]} margin={2} spacing={[2,2,6]} templateColumns={['1fr','1fr','1fr 2fr']} >
+        <Box mx="auto">
+          <Box w="fit-content">
+            <FileInput
+              setImageUrl={setImageUrl}
+              localImageUrl={localImageUrl}
+              setLocalImageUrl={setLocalImageUrl}
+              setError={setError}
+              trigger={trigger}
+              // TODO SEND IMAGE ERRORS
+              // TODO REGISTER IMAGE INPUT WITH VALIDATIONS
+              name="image"
+              {...register('image', { ...formValidations.image })}
+              error={errors.image}
+            />
+            {errors.image && (
+              <Text as="span" color="red.500" fontSize={15}>
+                {errors.image.message}
+              </Text>
+            )}
+          </Box>
+        </Box>
+        <VStack w="full" spacing={4}>
+          <Box w="full">
+            <TextInput
+              placeholder="Título da imagem..."
+              // TODO SEND TITLE ERRORS
+              // TODO REGISTER TITLE INPUT WITH VALIDATIONS
+              name="title"
+              {...register('title', { ...formValidations.title })}
+              isInvalid={errors.title}
+            />
+            {errors.title && (
+              <Text as="span" color="red.500" fontSize={15}>
+                {errors.title.message}
+              </Text>
+            )}
+          </Box>
+          <Box w="full">
+            <TextInput
+              placeholder="Descrição da imagem..."
+              // TODO SEND DESCRIPTION ERRORS
+              // TODO REGISTER DESCRIPTION INPUT WITH VALIDATIONS
+              name="description"
+              {...register('description', { ...formValidations.description })}
+              isInvalid={errors.description}
+            />
+            {errors.description && (
+              <Text as="span" color="red.500" fontSize={15}>
+                {errors.description.message}
+              </Text>
+            )}
+          </Box>
 
-        <TextInput
-          placeholder="Descrição da imagem..."
-          // TODO SEND DESCRIPTION ERRORS
-          // TODO REGISTER DESCRIPTION INPUT WITH VALIDATIONS
-          name="description"
-          {...register('description', { ...formValidations.description })}
-        />
-        {errors.description && <p>{errors.description.message}</p>}
-      </Stack>
-
-      <Button
-        my={6}
-        isLoading={isSubmitting}
-        isDisabled={isSubmitting}
-        type="submit"
-        w="100%"
-        py={6}
-      >
-        Enviar
-      </Button>
+          <Button
+            isLoading={isSubmitting}
+            isDisabled={isSubmitting}
+            type="submit"
+            w="100%"
+            py={6}
+          >
+            Enviar
+          </Button>
+        </VStack>
+      </SimpleGrid>
     </Box>
   );
 }

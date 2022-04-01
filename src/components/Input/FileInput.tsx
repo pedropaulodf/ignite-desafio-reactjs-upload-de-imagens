@@ -137,8 +137,8 @@ const FileInputBase: ForwardRefRenderFunction<
     <FormControl isInvalid={!!error}>
       <FormLabel
         mx="auto"
-        w={40}
-        h={40}
+        w={60}
+        h={60}
         htmlFor={name}
         cursor={isSending ? 'progress' : 'pointer'}
         opacity={isSending ? 0.5 : 1}
@@ -151,6 +151,8 @@ const FileInputBase: ForwardRefRenderFunction<
             alt="Uploaded photo"
             borderRadius="md"
             objectFit="cover"
+            border="1px solid"
+            borderColor="pGray.800"
           />
         ) : (
           <Flex
@@ -179,7 +181,7 @@ const FileInputBase: ForwardRefRenderFunction<
                 </Text>
               </>
             ) : (
-              <Box pos="relative" h="full">
+              <Box pos="relative" h="full" w="full">
                 {!!error && (
                   <Tooltip label={error.message} bg="red.500">
                     <FormErrorMessage
