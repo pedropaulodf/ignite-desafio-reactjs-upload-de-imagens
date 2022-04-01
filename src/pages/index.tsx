@@ -7,6 +7,7 @@ import { CardList } from '../components/CardList';
 import { api } from '../services/api';
 import { Loading } from '../components/Loading';
 import { Error } from '../components/Error';
+import Head from 'next/head';
 
 interface Image {
   title: string;
@@ -70,6 +71,10 @@ export default function Home(): JSX.Element {
 
   return (
     <>
+      <Head>
+        <title>upfi | Suas imagens bem organizadas</title>
+      </Head>
+
       <Header />
 
       <Box maxW={1120} px={[5,10,20]} mx="auto" my={20}>
